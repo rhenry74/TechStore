@@ -1,0 +1,112 @@
+﻿@inject IPersistence _storage;
+
+@if (Show)
+{
+    <div class="modal is-active">
+        <div class="modal-background" />
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">File Upload</p>
+            </header>
+            <section class="modal-card-body">
+                <h3>@Message</h3>
+                <InputFile OnChange="FileUploaded" />
+                <table>
+                    <tr>
+                        <td align="right"><h4>FileName: </h4></td>
+                        <td>@ArtifactInfo.FileName</td>
+                    </tr>
+                     <tr>
+                        <td align="right"><h4>FileSize: </h4></td>
+                        <td>@ArtifactInfo.FileSize</td>
+                    </tr>
+                    <tr>
+                        <td align="right"><h4>FileType: </h4></td>
+                        <td>@ArtifactInfo.FileType</td>
+                    </tr>
+                    <tr>
+                        <td align="right"><h4>LastModified: </h4></td>
+                        <td>@ArtifactInfo.LastModified</td>
+                    </tr>
+                    <tr>
+                        <td align="right"><h4>Key: </h4></td>
+                        <td>@ArtifactInfo.Key</td>
+                    </tr>
+                </table>
+                </section>
+            <footer class="modal-card-foot card-footer">
+                <button class="button modal-no" @onclick="ProcessNo">
+                    Cancel
+                </button>
+                @if (!hideTag)
+                {
+                    <button class="button is-primary modal-yes" @onclick="OnYes">
+                        Yes
+                    </button>
+                }
+            </footer>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter] public string Message { get; set; }
+
+    [Parameter] public bool Show { get; set; }
+
+    [Parameter] public bool hideTag { get; set; } = true;
+
+    [Parameter] public EventCallback OnNo { get; set; }
+
+    [Parameter] public EventCallback OnYes { get; set; }
+
+    [Parameter] public ArtifactFileInfo ArtifactInfo { get; set; }
+
+    const int MAX_FILESIZE = 5000 * 1024;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        ArtifactInfo.FileName = "not specified";
+        ArtifactInfo.FileSize = 0;
+        ArtifactInfo.FileType = "undefined";
+        ArtifactInfo.LastModified = DateTimeOffset.Now;
+        ArtifactInfo.Key = "undefined";
+    }
+
+    public async Task FileUploaded(InputFileChangeEventArgs e)
+    {
+        var browserFile = e.File;
+
+        if(browserFile != null)
+        {
+            ArtifactInfo.FileSize = browserFile.Size;
+            ArtifactInfo.FileType = browserFile.ContentType;
+            ArtifactInfo.FileName = browserFile.Name;
+            ArtifactInfo.LastModified = browserFile.LastModified;
+        }
+        try
+        {
+            var fileStream = browserFile.OpenReadStream(MAX_FILESIZE);
+
+            ArtifactInfo.Key = await _storage.SaveAsync(ArtifactInfo, fileStream);           
+
+            Message = "The file was uploaded successfully... should we keep it?";
+            hideTag = false;
+
+        }
+        catch (Exception ex)
+        {
+            Message = ex.Message;
+        }
+
+    }
+
+    public async Task ProcessNo(EventArgs e)
+    {
+        //might need to delete the artifact here
+        await OnNo.InvokeAsync();
+    }
+
+    }

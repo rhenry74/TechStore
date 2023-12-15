@@ -1,0 +1,63 @@
+﻿@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div>@ErrorMessage</div>
+}
+else
+{
+    <div class="card edit-detail">
+        <header class="card-header">
+            <p class="card-header-title">
+                Product Bullit Points
+            </p>
+        </header>
+
+        @if (Bullits != null && Bullits.Count() > 0)
+        {
+            <ul class="list">
+                @foreach (var bullit in Bullits.OrderBy(b => b.Order))
+                {
+                    <li role="presentation" style="list-style-type:none">
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <InputDetailInt Name="Order" Placeholder="Bullit list item order (defualt 0)" @bind-Value="bullit.Order" />
+                                    </td>
+                                    <td>
+                                        <InputDetailInt Name="Indent" Placeholder="Indention amount (defualt 0)" @bind-Value="bullit.Indent" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <InputDetailString Name="Text" Placeholder="Bullit text" @bind-Value="bullit.Text" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <footer class="card-footer">
+                                <ButtonFooter Class="delete-item"
+                                              IconClasses="fas fa-trash"
+                                              OnClick="@(async _ => await DeleteBullit.InvokeAsync(bullit))"
+                                              Label="Delete" />
+                            </footer>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+
+        <footer class="card-footer">
+            <ButtonFooter Class="add-item"
+                          IconClasses="fas fa-add"
+                          OnClick="@(async _ => await AddBullit.InvokeAsync())"
+                          Label="Add" />
+        </footer>
+    </div>
+}
+
+@code {
+    [Parameter] public IEnumerable<Bullit> Bullits { get; set; }
+    [Parameter] public EventCallback<Bullit> DeleteBullit { get; set; }
+    [Parameter] public EventCallback AddBullit { get; set; }
+    [Parameter] public string ErrorMessage { get; set; }
+
+}

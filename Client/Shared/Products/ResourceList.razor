@@ -1,0 +1,76 @@
+﻿@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div>@ErrorMessage</div>
+}
+else
+{
+    <div class="card edit-detail">
+        <header class="card-header">
+            <p class="card-header-title">
+                Resources
+            </p>
+        </header>
+
+        @if (Artifacts != null && Artifacts.Count() > 0)
+        {
+            <ul class="list">
+                @foreach (var artifact in Artifacts.OrderBy(a => a.Order))
+                {
+                    <li role="presentation" style="list-style-type:none">
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td width="66%">
+                                        <InputDetailString Name="Name" 
+                                            Placeholder="Short Capitolized Name" @bind-Value="artifact.Name" />
+                                    </td>
+                                    <td>
+                                        <InputDetailInt Name="Order" 
+                                            Placeholder="listing order" @bind-Value="artifact.Order" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <InputDetailString Name="Description"
+                                                           Placeholder="Verbose description of the resource." @bind-Value="artifact.Description" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <InputDetailString Name="URI" 
+                                            Placeholder="universal resource locator" @bind-Value="artifact.Uri" 
+                                            ReadOnly=true />
+                                        <button class="button modal-yes" @onclick="@(async _ => await OnUpload.InvokeAsync(artifact))">
+                                            Upload
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <footer class="card-footer">
+                                <ButtonFooter Class="delete-item"
+                                              IconClasses="fas fa-trash"
+                                              OnClick="@(async _ => await Delete.InvokeAsync(artifact))"
+                                              Label="Delete" />
+                            </footer>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+
+        <footer class="card-footer">
+            <ButtonFooter Class="add-item"
+                          IconClasses="fas fa-add"
+                          OnClick="@(async _ => await Add.InvokeAsync())"
+                          Label="Add" />
+        </footer>
+    </div>
+}
+
+@code {
+    [Parameter] public IEnumerable<Artifact> Artifacts { get; set; }
+    [Parameter] public EventCallback<Artifact> Delete { get; set; }
+    [Parameter] public EventCallback Add { get; set; }
+    [Parameter] public string ErrorMessage { get; set; }
+    [Parameter] public EventCallback<Artifact> OnUpload { get; set; }
+}
