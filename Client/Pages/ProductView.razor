@@ -1,0 +1,159 @@
+﻿@page "/product/{productId}/view"
+@inject HttpClient http
+@inject NavigationManager navigation
+
+@if (product == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="card edit-detail">
+        <header class="card-header">
+            <p class="card-header-title">
+                @product.Locator
+            </p>
+        </header>
+        <div class="card-content">
+            <div class="content">
+                @if (product.id != null)
+                {
+                    <label class="label" for="id">id</label>
+                    <input name="id"
+                           class="input"
+                           value="@product.id"
+                           readonly="readonly" />
+                }
+                <InputDetailString Name="Locator"
+                                   Placeholder="short-dashed-uniqie" @bind-Value="product.Locator" />
+                <InputDetailString Name="Title"
+                                   Placeholder="Short Detailed Capitolized" @bind-Value="product.Title" />
+                <InputDetailString Name="Description"
+                                   Placeholder="Verbose description of the product." @bind-Value="product.Description" />
+                @* <div class="field"> keeping for an example
+            <label class="label" for="quantity">
+            quantity
+            </label>
+            <input name="quantity"
+            class="input"
+            type="number"
+            min="1"
+            max="100"
+            value="@product.Quantity"
+            placeholder="1"
+            @onchange="@(e => product.Quantity = int.Parse(e.Value.ToString()))" />
+            </div> *@
+                <BullitList Bullits="product.Bullits"
+                            AddBullit="@AddBullit"
+                            DeleteBullit="@DeleteBullit" />
+                <ResourceList Artifacts="product.Artifacts"
+                              Add="@AddArtifact"
+                              Delete="@DeleteArtifact"
+                              OnUpload="@UploadArtifact"/>
+                               
+            </div>
+        </div>
+        <footer class="card-footer ">
+            <ButtonFooter Class="cancel-button"
+                          IconClasses="fas fa-undo"
+                          OnClick="@CancelProduct"
+                          Label="Return To List" />
+            <ButtonFooter Class="save-button"
+                          IconClasses="fas fa-save"
+                          OnClick="@Save"
+                          Label="Save Product" />
+        </footer>
+    </div>
+
+    <SingleFileDialog Message="Choose the artifact to upload..."
+                      OnNo="@CloseFileModal"
+                      OnYes="@FileFromModal"
+                      Show="@showFileModal"
+                      ArtifactInfo="@artifactInfo" />
+}
+
+@code {
+
+    private bool showFileModal;
+
+    private ArtifactFileInfo artifactInfo = new ArtifactFileInfo();
+
+    private Product product;
+
+    [Parameter] public string ProductId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ProductId == "x")
+        {
+            product = new Product();
+        }
+        else
+        {
+            var products = await http.GetFromJsonAsync<IEnumerable<Product>>("api/products");
+            product = products.First(p => p.id == ProductId);
+        }
+    }
+
+    private void AddBullit()
+    {
+        var newBullit = new Bullit();
+        newBullit.Order = product.Bullits.Count() + 1;
+        product.Bullits.Add(newBullit);
+    }
+
+    private void DeleteBullit(Bullit bullit)
+    {
+        product.Bullits.Remove(bullit);
+    }
+
+    private void AddArtifact()
+    {
+        var item = new Artifact();
+        item.Order = product.Artifacts.Count() + 1;
+        product.Artifacts.Add(item);
+    }
+
+    private void DeleteArtifact(Artifact item)
+    {
+        product.Artifacts.Remove(item);
+    }
+
+    private void UploadArtifact(Artifact item)
+    {
+        // Shows the popup at the center of the screen
+        showFileModal = true;
+        artifactInfo.Artifact = item;
+    }
+
+    private void CancelProduct()
+    {
+        navigation.NavigateTo("/");
+    }
+
+    private async Task Save()
+    {
+        if (product.id == null)
+        {
+            await http.PostAsJsonAsync("api/products", product);
+        }
+        else
+        {
+            await http.PutAsJsonAsync("api/products", product);
+        }
+        //navigation.NavigateTo("/");
+    }
+
+    private void CloseFileModal()
+    {
+        showFileModal = false;
+    }
+
+    private async Task FileFromModal()
+    {
+        showFileModal = false;
+        artifactInfo.Artifact.Uri = artifactInfo.Key;
+        artifactInfo.Artifact.FileName = artifactInfo.FileName;
+        await Save();
+    }
+}

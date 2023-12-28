@@ -20,8 +20,13 @@ else if (Products != null && Products.Count() > 0)
 
                         <ButtonFooter Class="edit-item"
                                       IconClasses="fas fa-edit"
-                                      OnClick="@(async _ => await SelectProduct.InvokeAsync(product))"
+                                      OnClick="@(async _ => await EditProduct.InvokeAsync(product))"
                                       Label="Edit" />
+
+                        <ButtonFooter Class="view-item"
+                                      IconClasses="fas fa-view"
+                                      OnClick="@(async _ => await ViewProduct.InvokeAsync(product))"
+                                      Label="Details" />
                     </footer>
                 </div>
             </li>
@@ -35,6 +40,7 @@ else
 @code {
     [Parameter] public IEnumerable<Product> Products { get; set; }
     [Parameter] public EventCallback<Product> DeleteProduct { get; set; }
-    [Parameter] public EventCallback<Product> SelectProduct { get; set; }
+    [Parameter] public EventCallback<Product> EditProduct { get; set; }
+    [Parameter] public EventCallback<Product> ViewProduct { get; set; }
     [Parameter] public string ErrorMessage { get; set; }
 }
