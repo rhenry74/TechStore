@@ -11,7 +11,8 @@
         <div class="column is-8">
             <ProductList ErrorMessage="@errorMessage"
                          Products="@products"
-                         SelectProduct="@SelectProduct"
+                         EditProduct="@EditProduct"
+                         ViewProduct="@ViewProduct"
                          DeleteProduct="@DeleteProduct" />
         </div>
     </div>
@@ -44,9 +45,14 @@
         products = await http.GetFromJsonAsync<IEnumerable<Product>>("api/products");
     }
 
-    private void SelectProduct(Product product)
+    private void EditProduct(Product product)
     {
-        navigation.NavigateTo($"/product/{product.id}");
+        navigation.NavigateTo($"/product/{product.id}/edit");
+    }
+
+    private void ViewProduct(Product product)
+    {
+        navigation.NavigateTo($"/product/{product.id}/view");
     }
 
     private void DeleteProduct(Product product)
