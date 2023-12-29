@@ -7,7 +7,7 @@ azure:
   - static web app
   - blob storage
 description: "a site where do it yourselfers can buy firmware"
-url: "https://yellow-pond-0c284060f.4.azurestaticapps.net"
+url: "https://salmon-dune-00ffa260f.4.azurestaticapps.net/"
 ---
 
 ## TechStore
