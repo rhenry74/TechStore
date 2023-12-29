@@ -1,12 +1,14 @@
-﻿@using Microsoft.FluentUI.AspNetCore.Components
+﻿@page "/about"
 
-@page "/about"
 <div class="content-container">
     <div class="content-title-group not-found">
         <h2 class="title">FirmWareHouse</h2>
-        <p>
-            We hope you are as excited about DIY as we are. DIY is a fun and cheap way to enhance and expand quality of life. Sometimes we want to do DIY projects that include microcontrollers but we don't want to spend the time learning how to code and flash them with firmware. If you've ever felt this way... you're in the right place.
-        </p>
+        <BSContainer Container="BlazorStrap.V5.Container.Medium">
+            We hope you are as excited about DIY as we are. DIY is a fun and cheap way to enhance and expand quality of life.
+            Sometimes we want to do DIY projects that include microcontrollers but we don't want to spend the time learning how to code and flash them with firmware.
+            If you've ever felt this way... you're in the right place.
+            100% wide until medium breakpoint
+        </BSContainer>
         <p>
             This site is where you can find all of the resources you need to put together a DIY project and flash the firmware directly from your browser.
         </p>
@@ -21,4 +23,23 @@
         </ul>
     </div>
 </div>
+
+<h class="card-header">panel</h>
+<div class="panel panel-primary">
+    <div class="panel-heading">Panel with panel-primary class</div>
+    <div class="panel-body">Panel Content</div>
+</div>
+
+<h2 class="card-header-title">card</h2>
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-header-title">Card title</h5>
+    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+    <p class="card-body">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <a href="#" class="card-link">Card link</a>
+    <a href="#" class="card-link">Another link</a>
+  </div>
+</div>
+
+
 
