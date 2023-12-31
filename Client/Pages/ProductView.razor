@@ -1,5 +1,4 @@
-﻿
-@page "/product/{productId}/view"
+﻿@page "/product/{productId}/view"
 @inject HttpClient http
 @inject NavigationManager navigation
 
@@ -9,7 +8,68 @@
 }
 else
 {
-    
+    <BSCard CardType="CardType.Card">
+        <BSCard CardType="CardType.Header">This is FirmWareHouse</BSCard>
+        <BSCard CardType="CardType.Body">
+            <BSContainer>
+                <BSRow>
+                    <BSCol>
+                        <BSCarousel HasControls HasIndicators>
+                            <BSCarouselItem>
+                                <BSImage Source="Images/celest_dia1.jpg"></BSImage>
+                            </BSCarouselItem>
+                            <BSCarouselItem>
+                                <BSImage Source="Images/celest_dia2.jpg"></BSImage>
+                            </BSCarouselItem>
+                        </BSCarousel>
+                    </BSCol>
+                    <BSCol>
+                        <BSCard CardType="CardType.Title">@product.Title</BSCard>
+                        <BSCard CardType="CardType.Subtitle">@product.Description</BSCard>
+                        <BSCard CardType="CardType.Title">Key Features:</BSCard>
+                        <BSListGroup>
+                        @foreach (var bullit in product.Bullits.OrderBy(b => b.Order))
+                        {
+                            <BSListGroupItem><BSBadge Color="BSColor.Light" IsPill>-   </BSBadge>@bullit.Text</BSListGroupItem>
+                        }
+                        </BSListGroup>
+                    </BSCol>
+                </BSRow>
+            </BSContainer>
+            <BSNav IsTabs="true">
+                <BSNavItem>
+                    <TabLabel>Parts List</TabLabel>
+                    <TabContent>
+
+                    </TabContent>
+                </BSNavItem>
+                <BSNavItem>
+                    <TabLabel>Resources</TabLabel>
+                    <TabContent>
+                        <BSTable IsStriped="true">
+                            <BSTHead>
+                                <BSTR>
+                                    <BSTD>#</BSTD>
+                                    <BSTD>Name</BSTD>
+                                    <BSTD>Description</BSTD>
+                                    <BSTD>Link</BSTD>
+                                </BSTR>
+                            </BSTHead>
+                            <BSTR>
+                            @foreach (var resource in product.Artifacts.OrderBy(a => a.Order))
+                            {
+                                    <BSTD><BSBadge Color="BSColor.Light" IsPill>-   </BSBadge></BSTD>
+                                    <BSTD><BSCard CardType="CardType.Text">@resource.Name</BSCard></BSTD>
+                                    <BSTD><BSCard CardType="CardType.Text">@resource.Description</BSCard></BSTD>
+                                    <BSTD><BSLink IsButton Url="http://www.google.com"><BSBadge Color="BSColor.Light" IsPill>www</BSBadge></BSLink></BSTD>
+                            }
+                            </BSTR>
+                        </BSTable>
+                    </TabContent>
+                </BSNavItem>
+            </BSNav>
+        </BSCard>
+    </BSCard>
 
 }
 
