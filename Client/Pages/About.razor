@@ -1,14 +1,17 @@
 ﻿@page "/about"
+
 <div class="content-container">
     <div class="content-title-group not-found">
         <h2 class="title">FirmWareHouse</h2>
-        <p>
-            We hope you are as excited about DIY as we are. DIY is a fun and cheap way to enhance and expand quality of life. Sometimes we want to do DIY projects that include microcontrollers but we don't want to spend the time learning how to code and flash them with firmware. If you've ever felt this way... you're in the right place.
-        </p>
-        <p>
+        <BSContainer Container="BlazorStrap.V5.Container.Medium">
+            We hope you are as excited about DIY as we are. DIY is a fun and cheap way to enhance and expand quality of life.
+            Sometimes we want to do DIY projects that include microcontrollers but we don't want to spend the time learning how to code and flash them with firmware.
+            If you've ever felt this way... you're in the right place.            
+        </BSContainer>
+        <BSContainer Container="BlazorStrap.V5.Container.Medium">
             This site is where you can find all of the resources you need to put together a DIY project and flash the firmware directly from your browser.
-        </p>
-        <br />
+        </BSContainer>
+        
         <h2 class="title">Resources</h2>
         <ul>
             <li>
@@ -19,3 +22,17 @@
         </ul>
     </div>
 </div>
+
+<BSCard CardType="CardType.Card">
+    <BSCard CardType="CardType.Title">Powered by</BSCard>
+    <BSCard CardType="CardType.Body">
+        <BSListGroup>
+            <BSListGroupItem><BSBadge Color="BSColor.Dark" IsPill>-</BSBadge> Blazor</BSListGroupItem>
+            <BSListGroupItem><BSBadge Color="BSColor.Dark" IsPill>-</BSBadge> BlazorStrap</BSListGroupItem>
+            <BSListGroupItem><BSBadge Color="BSColor.Dark" IsPill>-</BSBadge> Azure Functions</BSListGroupItem>
+            <BSListGroupItem><BSBadge Color="BSColor.Dark" IsPill>-</BSBadge> Azure Static App</BSListGroupItem>
+            <BSListGroupItem><BSBadge Color="BSColor.Dark" IsPill>-</BSBadge> Azure CosmosDB</BSListGroupItem>
+        </BSListGroup>
+    </BSCard>
+</BSCard>
+

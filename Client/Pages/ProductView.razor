@@ -8,68 +8,69 @@
 }
 else
 {
-    <div class="card edit-detail">
-        <header class="card-header">
-            <p class="card-header-title">
-                @product.Locator
-            </p>
-        </header>
-        <div class="card-content">
-            <div class="content">
-                @if (product.id != null)
-                {
-                    <label class="label" for="id">id</label>
-                    <input name="id"
-                           class="input"
-                           value="@product.id"
-                           readonly="readonly" />
-                }
-                <InputDetailString Name="Locator"
-                                   Placeholder="short-dashed-uniqie" @bind-Value="product.Locator" />
-                <InputDetailString Name="Title"
-                                   Placeholder="Short Detailed Capitolized" @bind-Value="product.Title" />
-                <InputDetailString Name="Description"
-                                   Placeholder="Verbose description of the product." @bind-Value="product.Description" />
-                @* <div class="field"> keeping for an example
-            <label class="label" for="quantity">
-            quantity
-            </label>
-            <input name="quantity"
-            class="input"
-            type="number"
-            min="1"
-            max="100"
-            value="@product.Quantity"
-            placeholder="1"
-            @onchange="@(e => product.Quantity = int.Parse(e.Value.ToString()))" />
-            </div> *@
-                <BullitList Bullits="product.Bullits"
-                            AddBullit="@AddBullit"
-                            DeleteBullit="@DeleteBullit" />
-                <ResourceList Artifacts="product.Artifacts"
-                              Add="@AddArtifact"
-                              Delete="@DeleteArtifact"
-                              OnUpload="@UploadArtifact"/>
-                               
-            </div>
-        </div>
-        <footer class="card-footer ">
-            <ButtonFooter Class="cancel-button"
-                          IconClasses="fas fa-undo"
-                          OnClick="@CancelProduct"
-                          Label="Return To List" />
-            <ButtonFooter Class="save-button"
-                          IconClasses="fas fa-save"
-                          OnClick="@Save"
-                          Label="Save Product" />
-        </footer>
-    </div>
+    <BSCard CardType="CardType.Card">
+        <BSCard CardType="CardType.Header">This is FirmWareHouse</BSCard>
+        <BSCard CardType="CardType.Body">
+            <BSContainer>
+                <BSRow>
+                    <BSCol>
+                        <BSCarousel HasControls HasIndicators>
+                            <BSCarouselItem>
+                                <BSImage Source="Images/celest_dia1.jpg"></BSImage>
+                            </BSCarouselItem>
+                            <BSCarouselItem>
+                                <BSImage Source="Images/celest_dia2.jpg"></BSImage>
+                            </BSCarouselItem>
+                        </BSCarousel>
+                    </BSCol>
+                    <BSCol>
+                        <BSCard CardType="CardType.Title">@product.Title</BSCard>
+                        <BSCard CardType="CardType.Subtitle">@product.Description</BSCard>
+                        <BSCard CardType="CardType.Title">Key Features:</BSCard>
+                        <BSListGroup>
+                        @foreach (var bullit in product.Bullits.OrderBy(b => b.Order))
+                        {
+                            <BSListGroupItem><BSBadge Color="BSColor.Light" IsPill>-   </BSBadge>@bullit.Text</BSListGroupItem>
+                        }
+                        </BSListGroup>
+                    </BSCol>
+                </BSRow>
+            </BSContainer>
+            <BSNav IsTabs="true">
+                <BSNavItem>
+                    <TabLabel>Parts List</TabLabel>
+                    <TabContent>
 
-    <SingleFileDialog Message="Choose the artifact to upload..."
-                      OnNo="@CloseFileModal"
-                      OnYes="@FileFromModal"
-                      Show="@showFileModal"
-                      ArtifactInfo="@artifactInfo" />
+                    </TabContent>
+                </BSNavItem>
+                <BSNavItem>
+                    <TabLabel>Resources</TabLabel>
+                    <TabContent>
+                        <BSTable IsStriped="true">
+                            <BSTHead>
+                                <BSTR>
+                                    <BSTD>#</BSTD>
+                                    <BSTD>Name</BSTD>
+                                    <BSTD>Description</BSTD>
+                                    <BSTD>Link</BSTD>
+                                </BSTR>
+                            </BSTHead>
+                            <BSTR>
+                            @foreach (var resource in product.Artifacts.OrderBy(a => a.Order))
+                            {
+                                    <BSTD><BSBadge Color="BSColor.Light" IsPill>-   </BSBadge></BSTD>
+                                    <BSTD><BSCard CardType="CardType.Text">@resource.Name</BSCard></BSTD>
+                                    <BSTD><BSCard CardType="CardType.Text">@resource.Description</BSCard></BSTD>
+                                    <BSTD><BSLink IsButton Url="http://www.google.com"><BSBadge Color="BSColor.Light" IsPill>www</BSBadge></BSLink></BSTD>
+                            }
+                            </BSTR>
+                        </BSTable>
+                    </TabContent>
+                </BSNavItem>
+            </BSNav>
+        </BSCard>
+    </BSCard>
+
 }
 
 @code {
